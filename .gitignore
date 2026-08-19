@@ -1,0 +1,21 @@
+# dependencies
+node_modules/
+
+# build / pack output
+*.tgz
+dist/
+lib/*.map
+
+# logs
+*.log
+npm-debug.log*
+
+# os / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# local env
+.env
+.env.local

@@ -1,0 +1,40 @@
+{
+  "name": "dsh-comfyui-commander",
+  "version": "0.1.0",
+  "description": "让 DSH Agent 通过自然语言全自动控制 ComfyUI:工作流列表/加载/UI→API 转换、任务提交与参数覆盖、进度监控(队列+WebSocket)、结果获取与下载、批量编排。",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "keywords": [
+    "dsh",
+    "cordis",
+    "comfyui",
+    "stable-diffusion",
+    "image-generation",
+    "video-generation",
+    "workflow",
+    "ai"
+  ],
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "*",
+    "@deepseek-ai/dsh-tools": "*",
+    "@deepseek-ai/dsh-subprocess": "*",
+    "@deepseek-ai/dsh-system-prompt": "*"
+  }
+}
