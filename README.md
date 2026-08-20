@@ -7,8 +7,6 @@
 > modify parameters or recombine nodes, submit image/video generations, watch progress
 > in real time, download results, and orchestrate batch pipelines.
 
-**DSH 插件市场当前没有同类插件**(截至 2026-08)——这是一个空白领域,本插件可作首个 ComfyUI 控制插件。
-
 ## ✨ 功能 / Features
 
 | 工具 Tool | 作用 What it does |
