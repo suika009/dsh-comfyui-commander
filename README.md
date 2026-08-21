@@ -7,7 +7,9 @@
 > modify parameters or recombine nodes, submit image/video generations, watch progress
 > in real time, download results, and orchestrate batch pipelines.
 
+
 为 DSH 提供完整的 ComfyUI 控制面:生成任务管理、工作流转换与重组、进度监控、结果获取,以及模型文件的盘点/归档/上传/移动(危险操作默认走安全门控)。
+
 
 ## ✨ 功能 / Features
 
