@@ -7,7 +7,7 @@
 > modify parameters or recombine nodes, submit image/video generations, watch progress
 > in real time, download results, and orchestrate batch pipelines.
 
-**DSH 插件市场当前没有同类插件**(截至 2026-08)——这是一个空白领域,本插件可作首个 ComfyUI 控制插件。
+为 DSH 提供完整的 ComfyUI 控制面:生成任务管理、工作流转换与重组、进度监控、结果获取,以及模型文件的盘点/归档/上传/移动(危险操作默认走安全门控)。
 
 ## ✨ 功能 / Features
 
@@ -22,6 +22,12 @@
 | `comfy_wait_task` | 阻塞等待完成(批量/多阶段编排) |
 | `comfy_queue_status` | 队列详情(只读) |
 | `comfy_interrupt` | 中断当前任务 |
+| `comfy_upload_model` | 上传/下载模型到 models(本地拷贝或 URL 直链,type=loras/checkpoints/vae/embeddings/unet/clip) |
+| `comfy_list_models` | 列出 models/<type> 文件(含大小,降序) |
+| `comfy_model_disk_usage` | 统计 models 磁盘占用 |
+| `comfy_export_model` | 归档:拷贝模型到 工作区\model-archive\<type>\ 并校验大小 |
+| `comfy_move_model` | models 目录内移动(支持子目录移回) |
+| `comfy_delete_model` | ⚠️ 仅安全配置 `allowDelete: true` 时注册,且需 `confirm: true` |
 
 ## 🔑 核心特性 / Highlights
 
@@ -63,6 +69,35 @@
 Agent 自动编排:`comfy_list_workflows` → `comfy_load_workflow` → `comfy_submit(overrides)` → `comfy_get_progress` → `comfy_fetch_results(download)`。
 
 批量编排:「先生成 5 张分镜,全部完成后用合并工作流合成视频」——用 `comfy_wait_task` 串行编排。
+
+## 🔒 安全配置 / Safety config
+
+模型文件操作遵循**默认安全、危险操作需手动开启**的原则。配置文件:`$DSH_HOME/dsh-comfyui-commander.json`:
+
+```json
+{
+  "safety": {
+    "allowDelete": false,    // 删除模型文件:默认关闭
+    "allowOverwrite": false, // 覆盖已有模型文件:默认关闭
+    "allowModify": false     // 修改:默认关闭
+  }
+}
+```
+
+- **默认允许**:新增(`comfy_upload_model` 写入新文件)、移动(`comfy_move_model`)、导出归档(`comfy_export_model`)、盘点(`comfy_list_models` / `comfy_model_disk_usage`)。
+- **默认关闭**:`comfy_delete_model` **不注册**(删除只能走 DSH 审批式权限提升);覆盖已有文件会拒绝。
+- **开启**:手动把对应值改为 `true` 并重启 DSH;`comfy_delete_model` 才会注册,且每次删除仍要求显式 `confirm: true`。
+
+## 🗂️ 模型管理闭环(SSD 空间)
+
+低频模型归档到机械盘工作区,需要时再传回:
+
+```
+comfy_model_disk_usage → comfy_list_models   (盘点占用)
+comfy_export_model                            (归档到 工作区\model-archive\<type>\ ,校验大小)
+[删除原文件:默认走 DSH 权限提升;或在配置开启 allowDelete 后用 comfy_delete_model]
+comfy_upload_model                            (需要时从 model-archive 传回)
+```
 
 ## 🏗️ 架构 / Architecture
 
